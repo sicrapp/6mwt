@@ -1,155 +1,336 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Patient Exercise Management</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
-<style>
-:root{--coral:#EF664B;--orange:#F57B39;--teal:#26A69A;--ink:#25334a;--muted:#8290a5;--line:#edf0f4;--bg:#f6f8fb;--sidebar:264px}
-*{box-sizing:border-box}body{font-family:'Kanit',sans-serif;background:var(--bg);color:var(--ink);font-weight:300}
-.sidebar{position:fixed;inset:0 auto 0 0;width:var(--sidebar);background:#fff;border-right:1px solid var(--line);z-index:1040;padding:24px 16px;display:flex;flex-direction:column;transition:.25s}
-.brand{display:flex;align-items:center;gap:12px;padding:0 10px 28px}.brand-mark{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--coral),var(--orange));display:grid;place-items:center;color:white;font-size:21px;box-shadow:0 8px 20px #ef664b38}
-.brand strong{font-weight:600;display:block;font-size:15px}.brand small{color:var(--muted);font-size:11px}
-.nav-label{font-size:10px;letter-spacing:1.3px;color:#aab3c0;padding:12px 12px 7px;font-weight:500}
-.nav-link{border:0;background:transparent;width:100%;text-align:left;color:#718096;padding:11px 13px;border-radius:12px;margin:2px 0;display:flex;gap:13px;align-items:center;font-size:13px;transition:.2s}
-.nav-link i{font-size:17px;width:20px;text-align:center}.nav-link:hover{background:#fff4f0;color:var(--coral)}.nav-link.active{background:#fff0eb;color:var(--coral);font-weight:500}
-.sidebar-bottom{margin-top:auto;padding:14px;background:#fff8f5;border-radius:15px;font-size:12px;color:#966454}
-.main{margin-left:var(--sidebar);min-height:100vh}.topbar{height:76px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 34px;position:sticky;top:0;z-index:900}
-.page{padding:30px 34px;max-width:1600px;margin:auto}.page-title{font-size:23px;font-weight:500;margin:0}.sub{font-size:12px;color:var(--muted);margin-top:4px}
-.cardx{background:white;border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 5px 22px #26344a06}.stat{display:flex;align-items:center;gap:14px}.stat-icon{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;font-size:21px}.stat-num{font-size:27px;font-weight:600;line-height:1.15}.stat-label{font-size:12px;color:var(--muted);margin-top:5px}
-.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.section-head h5{font-size:15px;font-weight:500;margin:0}.table{font-size:12px;vertical-align:middle;margin:0}.table thead th{background:#fafbfc;color:#8b97a8;font-weight:500;border-bottom:1px solid var(--line);white-space:nowrap;padding:13px}.table td{padding:12px 13px;border-color:#f1f3f6;white-space:nowrap}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:13px}
-.btn-primary{background:var(--coral);border-color:var(--coral)}.btn-primary:hover{background:#db573f;border-color:#db573f}.btn-soft{background:#fff0eb;color:var(--coral);border:0}.btn-soft:hover{background:#ffe3da;color:#d95740}.form-label{font-size:12px;color:#65748a;margin-bottom:6px}.form-control,.form-select{font-family:inherit;font-size:13px;border-color:#e7ebf0;border-radius:10px;padding:10px 12px}.form-control:focus,.form-select:focus{border-color:#f5a18f;box-shadow:0 0 0 .2rem #ef664b17}
-.badge-soft{padding:6px 9px;border-radius:7px;font-weight:400;font-size:10px}.b-green{background:#e7f6f1;color:#208b70}.b-orange{background:#fff2e5;color:#d87928}.b-red{background:#ffebeb;color:#d64c4c}.b-blue{background:#eaf3ff;color:#3478c7}.b-purple{background:#f2edff;color:#7956bd}
-.skeleton{background:linear-gradient(90deg,#f0f2f5 25%,#fafbfc 50%,#f0f2f5 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;border-radius:8px;height:22px}@keyframes shimmer{to{background-position:-200% 0}}
-.loading-overlay{position:fixed;inset:0;background:#ffffffa8;backdrop-filter:blur(2px);z-index:2000;display:none;place-items:center}.loading-overlay.show{display:grid}.spinner-border{color:var(--coral)}
-.view{display:none}.view.active{display:block}.quick{display:flex;gap:10px;flex-wrap:wrap}.quick-btn{border:1px solid var(--line);background:white;border-radius:13px;padding:12px 15px;display:flex;align-items:center;gap:9px;font-size:12px;color:#59677c}.quick-btn i{font-size:18px;color:var(--coral)}.quick-btn:hover{border-color:#f4b4a6;background:#fff9f6}
-#calendar{font-size:12px}.fc .fc-button-primary{background:var(--coral);border-color:var(--coral)}.fc .fc-button-primary:disabled{background:#f3a18f;border-color:#f3a18f}.fc .fc-daygrid-day-number{color:#59677c;text-decoration:none}.fc-event{border:0;padding:2px 4px}
-.mobile-menu{display:none}.mobile-bottom{display:none}.empty{text-align:center;padding:42px 15px;color:#9aa5b4;font-size:13px}.empty i{font-size:32px;display:block;margin-bottom:8px}
-@media(max-width:991px){.sidebar{transform:translateX(-100%);box-shadow:none}.sidebar.open{transform:translateX(0);box-shadow:10px 0 40px #18253a20}.main{margin-left:0}.topbar{padding:0 18px}.page{padding:23px 18px}.mobile-menu{display:inline-flex}.mobile-bottom{display:flex;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);z-index:950;justify-content:space-around;padding:8px 4px calc(8px + env(safe-area-inset-bottom))}.mobile-bottom button{border:0;background:none;color:#8995a6;font-size:10px;display:grid;justify-items:center;gap:3px}.mobile-bottom i{font-size:19px}.mobile-bottom button.active{color:var(--coral)}.page{padding-bottom:100px}}
-@media(max-width:575px){.topbar{height:64px}.page-title{font-size:19px}.cardx{padding:15px;border-radius:15px}.stat-num{font-size:23px}.hide-mobile{display:none!important}.section-head{align-items:flex-start;gap:10px}.section-head .btn{font-size:11px}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#00897B">
+  <title>แบบประเมินความพึงพอใจ | หน่วยสังคมสงเคราะห์</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--primary:#00897B;--secondary:#4DB6AC;--mint:#B2DFDB;--pale:#E0F2F1;--ink:#263238;--bg:#F8FAFA}
+    *{font-family:'Kanit',sans-serif} body{background:var(--bg);color:var(--ink)}
+    .sidebar-link{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;color:#60716f;transition:.2s;font-size:14px}
+    .sidebar-link:hover,.sidebar-link.active{background:#E0F2F1;color:#00796B;font-weight:500}
+    .card{background:#fff;border:1px solid #e8efee;border-radius:22px;box-shadow:0 8px 30px rgba(30,80,75,.035)}
+    .field{width:100%;border:1px solid #dce7e5;border-radius:13px;padding:11px 13px;outline:none;background:#fff;transition:.2s}
+    .field:focus{border-color:#4DB6AC;box-shadow:0 0 0 3px rgba(77,182,172,.13)}
+    .choice{border:1px solid #e0e9e7;border-radius:13px;padding:11px 12px;display:flex;align-items:center;gap:9px;cursor:pointer;transition:.18s;background:#fff}
+    .choice:has(input:checked){border-color:#4DB6AC;background:#F0FAF8;color:#00796B}
+    .rating-option{border:1px solid #e1e9e8;border-radius:12px;padding:9px 5px;text-align:center;cursor:pointer;font-size:12px;transition:.18s;background:white}
+    .rating-option:has(input:checked){background:#E0F2F1;border-color:#00897B;color:#00695C;font-weight:600}
+    .rating-option input{accent-color:#00897B}
+    .btn-primary{background:#00897B;color:#fff;border-radius:14px;padding:12px 20px;font-weight:500;transition:.2s}
+    .btn-primary:hover{background:#00796B;transform:translateY(-1px)}
+    .btn-soft{background:#E0F2F1;color:#00796B;border-radius:13px;padding:10px 14px}
+    .skeleton{background:linear-gradient(90deg,#edf3f2 25%,#f7f9f9 37%,#edf3f2 63%);background-size:400% 100%;animation:shine 1.3s ease infinite;border-radius:12px}
+    @keyframes shine{0%{background-position:100% 0}100%{background-position:0 0}}
+    .spin{width:18px;height:18px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;display:inline-block;animation:rotate .7s linear infinite}
+    @keyframes rotate{to{transform:rotate(360deg)}}
+    .mobile-nav{box-shadow:0 -5px 25px rgba(20,60,55,.08)}
+    .section-number{width:30px;height:30px;border-radius:10px;background:#E0F2F1;color:#00796B;display:grid;place-items:center;font-weight:600;font-size:13px;flex:none}
+    .hidden-view{display:none!important}
+    @media(min-width:1024px){.main-area{margin-left:260px}}
+    @media(max-width:1023px){.desktop-sidebar{transform:translateX(-105%);transition:transform .25s}.desktop-sidebar.open{transform:translateX(0)}}
+  </style>
 </head>
 <body>
-<aside class="sidebar" id="sidebar">
- <div class="brand"><div class="brand-mark"><i class="bi bi-heart-pulse-fill"></i></div><div><strong>RehabCare</strong><small>Patient Exercise System</small></div></div>
- <div class="nav-label">WORKSPACE</div>
- <button class="nav-link active" data-view="dashboard"><i class="bi bi-grid-1x2"></i>Dashboard</button>
- <button class="nav-link" data-view="patients"><i class="bi bi-people"></i>ข้อมูลผู้ป่วยทั้งหมด</button>
- <button class="nav-link" data-view="daily"><i class="bi bi-calendar2-check"></i>ตารางผู้ป่วยรายวัน</button>
- <button class="nav-link" data-view="calendar"><i class="bi bi-calendar3"></i>ปฏิทินออกกำลังกาย</button>
- <button class="nav-link" data-view="status"><i class="bi bi-activity"></i>สถานะผู้ป่วย</button>
- <div class="nav-label">MANAGEMENT</div>
- <button class="nav-link" data-view="holidays"><i class="bi bi-calendar-x"></i>จัดการวันหยุด</button>
- <button class="nav-link" data-view="doctors"><i class="bi bi-person-badge"></i>จัดการแพทย์</button>
- <button class="nav-link" data-view="settings"><i class="bi bi-sliders"></i>ตั้งค่าระบบ</button>
- <div class="sidebar-bottom"><i class="bi bi-shield-check me-1"></i> ข้อมูลผู้ป่วยจัดเก็บใน Google Sheets<br><small>โปรดใช้งานภายใต้นโยบายความปลอดภัยของหน่วยงาน</small></div>
-</aside>
-<div class="main">
-<header class="topbar"><div class="d-flex align-items-center gap-3"><button class="btn btn-light mobile-menu" onclick="toggleSidebar()"><i class="bi bi-list fs-5"></i></button><div><div class="fw-medium" style="font-size:14px">Patient Exercise Management</div><div class="sub" id="todayLabel">กำลังโหลดข้อมูล...</div></div></div><div class="d-flex align-items-center gap-2"><span class="badge-soft b-green hide-mobile"><i class="bi bi-circle-fill me-1" style="font-size:7px"></i>Connected</span><button class="btn btn-sm btn-light rounded-3" onclick="refreshData()"><i class="bi bi-arrow-clockwise"></i></button></div></header>
-<main class="page">
-<section class="view active" id="view-dashboard">
- <div class="d-flex justify-content-between align-items-start mb-4"><div><h1 class="page-title">ภาพรวมระบบ</h1><div class="sub">สรุปข้อมูลการดูแลและตารางออกกำลังกายผู้ป่วย</div></div><span class="badge-soft b-blue" id="dashboardDate">Today</span></div>
- <div class="row g-3 mb-4" id="stats"><div class="col-6 col-xl-3"><div class="cardx skeleton"></div></div><div class="col-6 col-xl-3"><div class="cardx skeleton"></div></div><div class="col-6 col-xl-3"><div class="cardx skeleton"></div></div><div class="col-6 col-xl-3"><div class="cardx skeleton"></div></div></div>
- <div class="cardx mb-4"><div class="section-head"><h5>ทางลัดการทำงาน</h5></div><div class="quick"><button class="quick-btn" onclick="openPatientModal()"><i class="bi bi-person-plus"></i>เพิ่มผู้ป่วย</button><button class="quick-btn" onclick="showView('daily')"><i class="bi bi-calendar-check"></i>ตารางวันนี้</button><button class="quick-btn" onclick="showView('calendar')"><i class="bi bi-calendar3"></i>ดูปฏิทิน</button><button class="quick-btn" onclick="showView('holidays')"><i class="bi bi-calendar-plus"></i>เพิ่มวันหยุด</button></div></div>
- <div class="row g-3"><div class="col-lg-6"><div class="cardx h-100"><div class="section-head"><h5>ผู้ป่วยแยกตามโปรแกรม</h5></div><div style="height:230px"><canvas id="programChart"></canvas></div></div></div><div class="col-lg-6"><div class="cardx h-100"><div class="section-head"><h5>ระดับความเสี่ยง</h5></div><div style="height:230px"><canvas id="riskChart"></canvas></div></div></div><div class="col-12"><div class="cardx"><div class="section-head"><h5>ตารางออกกำลังกายวันนี้</h5><button class="btn btn-sm btn-soft" onclick="showView('daily')">ดูทั้งหมด <i class="bi bi-arrow-right"></i></button></div><div id="todayTable"></div></div></div></div>
-</section>
-<section class="view" id="view-patients"><div class="section-head"><div><h1 class="page-title">ข้อมูลผู้ป่วยทั้งหมด</h1><div class="sub">จัดการข้อมูลและโปรแกรมการออกกำลังกาย</div></div><button class="btn btn-primary btn-sm rounded-3" onclick="openPatientModal()"><i class="bi bi-plus-lg me-1"></i>เพิ่มผู้ป่วย</button></div><div class="cardx"><div class="row g-2 mb-3"><div class="col-md-5"><input class="form-control" id="patientSearch" placeholder="ค้นหาด้วย HN หรือชื่อผู้ป่วย..." oninput="renderPatients()"></div><div class="col-md-3"><select class="form-select" id="programFilter" onchange="renderPatients()"><option value="">ทุกโปรแกรม</option><option>Reconditioning Program</option><option>Phase II Program</option></select></div><div class="col-md-2"><select class="form-select" id="statusFilter" onchange="renderPatients()"><option value="">ทุกสถานะ</option><option>ACTIVE</option><option>COMPLETED</option><option>CANCELLED</option></select></div></div><div id="patientsTable"></div></div></section>
-<section class="view" id="view-daily"><div class="section-head"><div><h1 class="page-title">ตารางผู้ป่วยรายวัน</h1><div class="sub">ตรวจสอบรายชื่อและบันทึกสถานะการออกกำลังกาย</div></div></div><div class="cardx"><div class="row g-2 mb-3"><div class="col-sm-4"><label class="form-label">วันที่</label><input type="date" class="form-control" id="dailyDate" onchange="renderDaily()"></div><div class="col-sm-4"><label class="form-label">ค้นหาผู้ป่วย</label><input class="form-control" id="dailySearch" placeholder="HN หรือชื่อ" oninput="renderDaily()"></div><div class="col-sm-4"><label class="form-label">โปรแกรม</label><select class="form-select" id="dailyProgram" onchange="renderDaily()"><option value="">ทุกโปรแกรม</option><option>Reconditioning Program</option><option>Phase II Program</option></select></div></div><div id="dailyTable"></div></div></section>
-<section class="view" id="view-calendar"><div class="section-head"><div><h1 class="page-title">ปฏิทินออกกำลังกาย</h1><div class="sub">แสดงตารางผู้ป่วยและวันหยุด</div></div></div><div class="cardx"><div id="calendar"></div></div></section>
-<section class="view" id="view-status"><div class="section-head"><div><h1 class="page-title">สถานะผู้ป่วย</h1><div class="sub">ติดตามความก้าวหน้าของโปรแกรม</div></div></div><div class="cardx"><div class="table-wrap"><table class="table"><thead><tr><th>OPD Queue</th><th>HN / ชื่อ</th><th>โปรแกรม</th><th>ความเสี่ยง</th><th>ความก้าวหน้า</th><th>เริ่ม – สิ้นสุด</th><th>สถานะ</th></tr></thead><tbody id="statusRows"></tbody></table></div></div></section>
-<section class="view" id="view-holidays"><div class="section-head"><div><h1 class="page-title">จัดการวันหยุด</h1><div class="sub">วันที่ถูกกำหนดเป็นวันหยุดจะไม่สร้าง Session</div></div><button class="btn btn-primary btn-sm rounded-3" onclick="openHolidayModal()"><i class="bi bi-plus-lg me-1"></i>เพิ่มวันหยุด</button></div><div class="cardx"><div id="holidayTable"></div></div></section>
-<section class="view" id="view-doctors"><div class="section-head"><div><h1 class="page-title">จัดการแพทย์</h1><div class="sub">รายชื่อแพทย์เจ้าของไข้</div></div><button class="btn btn-primary btn-sm rounded-3" onclick="openDoctorModal()"><i class="bi bi-plus-lg me-1"></i>เพิ่มแพทย์</button></div><div class="cardx"><div id="doctorTable"></div></div></section>
-<section class="view" id="view-settings"><div class="section-head"><div><h1 class="page-title">ตั้งค่าระบบ</h1><div class="sub">การเชื่อมต่อและข้อมูลระบบ</div></div></div><div class="cardx"><h6 class="mb-3">การเชื่อมต่อฐานข้อมูล</h6><div class="d-flex align-items-center gap-2 mb-3"><span class="badge-soft b-green">Google Sheets</span><small class="text-secondary">เชื่อมต่อผ่าน Google Apps Script</small></div><div class="small text-secondary mb-2">Spreadsheet ID</div><code>1iKrl9XoX54qNwESEeaesg5fLYCAkjEBhUnKCI2Aoxkg</code><hr><h6>ช่วงเวลาออกกำลังกาย</h6><div class="d-flex gap-2 flex-wrap mt-2" id="timeBadges"></div><p class="small text-secondary mt-3 mb-0">การปิดใช้งานช่วงเวลาและการกำหนดจำนวนผู้ป่วยสูงสุด สามารถต่อยอดผ่านชีต Settings ได้</p></div></section>
-</main>
-</div>
-<nav class="mobile-bottom"><button class="active" data-view="dashboard"><i class="bi bi-grid"></i>หน้าหลัก</button><button data-view="patients"><i class="bi bi-people"></i>ผู้ป่วย</button><button data-view="daily"><i class="bi bi-calendar-check"></i>ตาราง</button><button data-view="calendar"><i class="bi bi-calendar3"></i>ปฏิทิน</button><button data-view="status"><i class="bi bi-activity"></i>สถานะ</button></nav>
-<div class="loading-overlay" id="loading"><div class="text-center"><div class="spinner-border mb-2"></div><div class="small text-secondary">กำลังดำเนินการ...</div></div></div>
-<!-- Patient modal -->
-<div class="modal fade" id="patientModal" tabindex="-1"><div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable"><div class="modal-content border-0 rounded-4"><div class="modal-header border-0 px-4 pt-4"><div><h5 class="modal-title fw-medium">เพิ่มข้อมูลผู้ป่วย</h5><div class="sub">กรอกข้อมูลเพื่อสร้างตารางออกกำลังกายอัตโนมัติ</div></div><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body px-4"><form id="patientForm"><input type="hidden" name="Patient ID"><input type="hidden" name="OPD Queue ID"><div class="row g-3">
-<div class="col-md-4"><label class="form-label">HN *</label><input class="form-control" name="HN" required></div><div class="col-md-8"><label class="form-label">ชื่อ-นามสกุล *</label><input class="form-control" name="Full Name" required></div>
-<div class="col-md-6"><label class="form-label">Program Type *</label><select class="form-select" name="Program Type" required><option value="">เลือกโปรแกรม</option><option>Reconditioning Program</option><option>Phase II Program</option></select></div><div class="col-md-6"><label class="form-label">Risk Level *</label><select class="form-select" name="Risk Level" required><option value="">เลือกระดับความเสี่ยง</option><option>High Risk</option><option>Moderate Risk</option><option>Low Risk</option></select></div>
-<div class="col-md-6"><label class="form-label">Attending Physician *</label><select class="form-select" name="Attending Physician" id="doctorSelect" required><option value="">เลือกแพทย์</option></select></div><div class="col-md-6"><label class="form-label">Total Sessions *</label><input type="number" min="1" max="200" class="form-control" name="Total Sessions" required></div>
-<div class="col-md-4"><label class="form-label">Frequency *</label><select class="form-select" name="Frequency" required><option value="1">1 ครั้ง/สัปดาห์</option><option value="2">2 ครั้ง/สัปดาห์</option></select></div><div class="col-md-4"><label class="form-label">Start Date *</label><input type="date" class="form-control" name="Start Date" required></div><div class="col-md-4"><label class="form-label">Time Slot *</label><select class="form-select" name="Time Slot" id="timeSelect" required></select></div>
-</div><div class="alert alert-light border mt-3 small mb-0"><i class="bi bi-info-circle text-primary me-1"></i>ระบบจะตรวจสอบวันเริ่มต้น วันหยุด และสร้างจำนวน Session ให้ครบตามกฎของโปรแกรม ก่อนบันทึก</div></form></div><div class="modal-footer border-0 px-4 pb-4"><button class="btn btn-light rounded-3" data-bs-dismiss="modal">ยกเลิก</button><button class="btn btn-primary rounded-3 px-4" onclick="submitPatient()"><i class="bi bi-check2 me-1"></i>บันทึกผู้ป่วย</button></div></div></div></div>
-<div class="modal fade" id="holidayModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content border-0 rounded-4"><div class="modal-header border-0"><h5 class="modal-title">เพิ่มวันหยุด</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><form id="holidayForm"><div class="mb-3"><label class="form-label">วันที่</label><input type="date" name="Holiday Date" class="form-control" required></div><div class="mb-3"><label class="form-label">ชื่อวันหยุด</label><input name="Holiday Name" class="form-control" required></div><div class="mb-3"><label class="form-label">ประเภท</label><select name="Holiday Type" class="form-select"><option>วันหยุดราชการไทย</option><option>วันหยุดนักขัตฤกษ์</option><option>วันหยุดพิเศษ</option><option>วันหยุดที่ผู้ดูแลกำหนดเอง</option></select></div><div><label class="form-label">รายละเอียด</label><input name="Description" class="form-control"></div></form></div><div class="modal-footer border-0"><button class="btn btn-light" data-bs-dismiss="modal">ยกเลิก</button><button class="btn btn-primary" onclick="submitHoliday()">บันทึก</button></div></div></div></div>
-<div class="modal fade" id="doctorModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content border-0 rounded-4"><div class="modal-header border-0"><h5 class="modal-title">เพิ่มแพทย์</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><form id="doctorForm"><div class="mb-3"><label class="form-label">ชื่อแพทย์</label><input name="Doctor Name" class="form-control" required></div><div><label class="form-label">ความเชี่ยวชาญ</label><input name="Specialty" class="form-control"></div></form></div><div class="modal-footer border-0"><button class="btn btn-light" data-bs-dismiss="modal">ยกเลิก</button><button class="btn btn-primary" onclick="submitDoctor()">บันทึก</button></div></div></div></div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-let DATA={patients:[],sessions:[],holidays:[],doctors:[],times:[]}, charts={}, calendar;
-const $=id=>document.getElementById(id), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const call=(action,payload={})=>new Promise((resolve,reject)=>google.script.run.withSuccessHandler(resolve).withFailureHandler(e=>reject(new Error(e.message||e)) ).api(action,payload));
-function busy(on){$('loading').classList.toggle('show',on)}
-async function run(action,payload={}){busy(true);try{return await call(action,payload)}catch(e){Swal.fire({icon:'error',title:'ไม่สำเร็จ',text:e.message});throw e}finally{busy(false)}}
-function toast(title,icon='success'){Swal.fire({toast:true,position:'top-end',icon,title,showConfirmButton:false,timer:2600,timerProgressBar:true})}
-async function refreshData(){busy(true);try{DATA=await call('init');renderAll();$('todayLabel').textContent='ข้อมูลประจำวันที่ '+new Date().toLocaleDateString('th-TH',{dateStyle:'long'});$('dashboardDate').textContent=new Date().toLocaleDateString('th-TH',{dateStyle:'long'})}catch(e){Swal.fire('เชื่อมต่อไม่สำเร็จ',e.message,'error')}finally{busy(false)}}
-function renderAll(){renderDashboard();renderPatients();renderDaily();renderStatus();renderHolidays();renderDoctors();renderSettings();populateSelects()}
-function showView(name){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id==='view-'+name));document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===name));if(name==='calendar')renderCalendar();if(window.innerWidth<992)$('sidebar').classList.remove('open')}
-function toggleSidebar(){$('sidebar').classList.toggle('open')}
-document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)));
-function statusLabel(s){return ({ACTIVE:'กำลังเข้าร่วม',COMPLETED:'เสร็จสิ้น',NO_SHOW:'ไม่มาตามนัด',CANCELLED:'ยกเลิก',SCHEDULED:'รอตามกำหนด'})[s]||s}
-function statusBadge(s){let c=s==='ACTIVE'||s==='COMPLETED'||s==='NO_SHOW'?'b-green':s==='CANCELLED'?'b-red':s==='SCHEDULED'?'b-blue':'b-orange';return `<span class="badge-soft ${c}">${esc(statusLabel(s))}</span>`}
-function countedSession_(s){return s['Session Status']==='COMPLETED'||s['Session Status']==='NO_SHOW'}
-function riskBadge(s){return `<span class="badge-soft ${s==='High Risk'?'b-red':s==='Moderate Risk'?'b-orange':'b-green'}">${esc(s)}</span>`}
-function statCard(label,num,icon,color,sub){return `<div class="col-6 col-xl-3"><div class="cardx h-100"><div class="stat"><div class="stat-icon" style="background:${color}18;color:${color}"><i class="bi ${icon}"></i></div><div><div class="stat-num">${num}</div><div class="stat-label">${label}</div></div></div>${sub?`<div class="small text-secondary mt-3">${sub}</div>`:''}</div></div>`}
-async function renderDashboard(){let d;try{d=await call('dashboard')}catch(e){return}
-$('stats').innerHTML=statCard('ผู้ป่วยทั้งหมด',d.total,'bi-people','#EF664B','ข้อมูลในระบบ')+statCard('กำลังเข้าร่วม',d.active,'bi-heart-pulse','#26A69A','สถานะ ACTIVE')+statCard('จบโปรแกรมแล้ว',d.completed,'bi-check-circle','#0288D1','สถานะ COMPLETED')+statCard('มีกำหนดวันนี้',d.today,'bi-calendar-check','#F57B39','Session วันนี้');
-drawChart('programChart','doughnut',['Reconditioning','Phase II'],[d.reconditioning,d.phase2]);drawChart('riskChart','doughnut',['High','Moderate','Low'],[d.high,d.moderate,d.low]);
-const list=d.daily.map(s=>{let p=DATA.patients.find(x=>x['Patient ID']===s['Patient ID'])||{};return {...s,p}}).sort((a,b)=>a['Scheduled Time'].localeCompare(b['Scheduled Time']));
-$('todayTable').innerHTML=list.length?tableHtml(['เวลา','OPD Queue','HN','ชื่อผู้ป่วย','โปรแกรม','Risk','Session','สถานะ'],list.map(s=>[s['Scheduled Time'],s['OPD Queue ID'],s.HN,s.p['Full Name']||'-',shortProgram(s.p['Program Type']),riskBadge(s.p['Risk Level']),s['Session Number'],statusBadge(s['Session Status'])])):'<div class="empty"><i class="bi bi-calendar2-check"></i>ไม่มีตารางออกกำลังกายในวันนี้</div>'}
-function drawChart(id,type,labels,values){if(charts[id])charts[id].destroy();charts[id]=new Chart($(id),{type,data:{labels,datasets:[{data:values,backgroundColor:['#EF664B','#0288D1','#26A69A'],borderWidth:0,hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{usePointStyle:true,boxWidth:8,font:{family:'Kanit'}}}}}})}
-function tableHtml(headers,rows){return `<div class="table-wrap"><table class="table"><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map((r,i)=>`<tr>${r.map(v=>`<td>${v??''}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`}
-function shortProgram(s){return s==='Reconditioning Program'?'Reconditioning':'Phase II'}
-function renderPatients(){const q=($('patientSearch')?.value||'').toLowerCase(),prog=$('programFilter')?.value||'',st=$('statusFilter')?.value||'';let arr=DATA.patients.filter(p=>(!q||String(p.HN).toLowerCase().includes(q)||String(p['Full Name']).toLowerCase().includes(q))&&(!prog||p['Program Type']===prog)&&(!st||p['Patient Status']===st));$('patientsTable').innerHTML=arr.length?tableHtml(['OPD Queue','HN / ชื่อผู้ป่วย','โปรแกรม','Risk','Session','เริ่ม – สิ้นสุด','สถานะ','จัดการ'],arr.map(p=>{let done=DATA.sessions.filter(s=>s['Patient ID']===p['Patient ID']&&countedSession_(s)).length;return [ `<b>${esc(p['OPD Queue ID'])}</b>`,`${esc(p.HN)}<br><span class="text-secondary">${esc(p['Full Name'])}</span>`,shortProgram(p['Program Type']),riskBadge(p['Risk Level']),`${done}/${p['Total Sessions']}`,`${p['Start Date']}<br>${p['End Date']}`,statusBadge(p['Patient Status']),`<button class="btn btn-sm btn-light" onclick="editPatient('${p['Patient ID']}')"><i class="bi bi-pencil"></i></button> <button class="btn btn-sm btn-light text-danger" onclick="cancelPatient('${p['Patient ID']}')"><i class="bi bi-x-circle"></i></button>`]})):'<div class="empty"><i class="bi bi-people"></i>ไม่พบข้อมูลผู้ป่วย</div>'}
-function patientTimeSlot_(patient){
-  if(!patient)return '';
-  // รองรับชื่อหัวคอลัมน์ที่มีช่องว่างเกิน/ตัวพิมพ์ต่างกัน
-  const key=Object.keys(patient).find(k=>String(k).trim().toLowerCase()==='time slot');
-  return key===undefined?'':patient[key];
-}
-function normalizeTimeSlot(value){
-  if(value===null||value===undefined||value==='')return '-';
-  const allowed=['09:00','10:30','13:00','14:00'];
-  // Google Sheets อาจส่งค่าเวลาเป็นเลขเศษส่วนของ 1 วัน
-  if(typeof value==='number' && value>=0 && value<1){
-    const mins=Math.round(value*1440), hh=String(Math.floor(mins/60)).padStart(2,'0'),
-      mm=String(mins%60).padStart(2,'0'), out=hh+':'+mm;
-    return allowed.includes(out)?out:'-';
-  }
-  let raw=String(value).trim();
-  // รองรับ ISO Date, HH:mm:ss, HH:mm และ AM/PM
-  let m=raw.match(/(?:T|\s)?(\d{1,2}):(\d{2})(?::\d{2}(?:\.\d+)?)?\s*(AM|PM)?/i);
-  if(!m)return '-';
-  let hour=Number(m[1]), minute=m[2], ampm=(m[3]||'').toUpperCase();
-  if(ampm==='PM'&&hour<12)hour+=12;
-  if(ampm==='AM'&&hour===12)hour=0;
-  const out=String(hour).padStart(2,'0')+':'+minute;
-  return allowed.includes(out)?out:'-';
-}
+  <div id="appShell" class="min-h-screen">
+    <aside id="sidebar" class="desktop-sidebar fixed z-50 inset-y-0 left-0 w-[260px] bg-white border-r border-[#e8efee] p-5 flex flex-col">
+      <div class="flex items-center gap-3 px-2 py-3">
+        <div class="w-11 h-11 rounded-2xl bg-[#00897B] text-white grid place-items-center"><i data-lucide="heart-handshake" class="w-6 h-6"></i></div>
+        <div><div class="font-semibold text-[15px]">Social Service</div><div class="text-[11px] text-slate-400">Satisfaction Survey 2570</div></div>
+        <button id="closeDrawer" class="ml-auto lg:hidden text-slate-400"><i data-lucide="x"></i></button>
+      </div>
+      <div class="mt-8 mb-3 px-3 text-[10px] tracking-[.16em] text-slate-400 font-semibold">MAIN MENU</div>
+      <nav class="space-y-1">
+        <button class="sidebar-link active w-full" data-view="survey"><i data-lucide="clipboard-list" class="w-[18px]"></i> แบบประเมินความพึงพอใจ</button>
+        <button class="sidebar-link w-full" data-view="dashboard"><i data-lucide="chart-no-axes-combined" class="w-[18px]"></i> ภาพรวมผลประเมิน</button>
+      </nav>
+      <div class="mt-auto rounded-2xl bg-[#F0FAF8] p-4">
+        <div class="w-9 h-9 rounded-xl bg-white text-[#00897B] grid place-items-center mb-3"><i data-lucide="shield-check"></i></div>
+        <div class="text-sm font-medium text-[#28514d]">ข้อมูลแบบสอบถาม</div>
+        <p class="text-xs leading-5 text-[#66817d] mt-1">ระบบจัดเก็บข้อมูลเพื่อพัฒนาคุณภาพการให้บริการ</p>
+      </div>
+      <div class="text-[11px] text-slate-400 px-2 pt-4">© 2570 หน่วยสังคมสงเคราะห์</div>
+    </aside>
 
-function renderDaily(){if(!$('dailyDate').value)$('dailyDate').value=DATA.today||new Date().toISOString().slice(0,10);let date=$('dailyDate').value,q=($('dailySearch')?.value||'').toLowerCase(),prog=$('dailyProgram')?.value||'';let arr=DATA.sessions.filter(s=>s['Scheduled Date']===date&&s['Session Status']!=='CANCELLED').map(s=>({...s,p:DATA.patients.find(p=>p['Patient ID']===s['Patient ID'])||{}})).map(s=>({...s,displayTime:normalizeTimeSlot(patientTimeSlot_(s.p))})).filter(s=>(!q||String(s.HN).toLowerCase().includes(q)||String(s.p['Full Name']).toLowerCase().includes(q))&&(!prog||s.p['Program Type']===prog)).sort((a,b)=>['09:00','10:30','13:00','14:00'].indexOf(a.displayTime)-['09:00','10:30','13:00','14:00'].indexOf(b.displayTime));$('dailyTable').innerHTML=arr.length?tableHtml(['ลำดับ','ช่วงเวลา','OPD Queue ID','HN','ชื่อผู้ป่วย','โปรแกรม','ความเสี่ยง','ครั้งที่','สถานะ','เปลี่ยนสถานะ'],arr.map((s,i)=>[i+1,esc(s.displayTime),s['OPD Queue ID'],s.HN,esc(s.p['Full Name']),shortProgram(s.p['Program Type']),riskBadge(s.p['Risk Level']),`${s['Session Number']}/${s.p['Total Sessions']}`,statusBadge(s['Session Status']),`<select class="form-select form-select-sm" style="min-width:140px" onchange="changeSession('${s['Session ID']}',this.value)"><option value="SCHEDULED" ${s['Session Status']==='SCHEDULED'?'selected':''}>รอตามกำหนด</option><option value="COMPLETED" ${s['Session Status']==='COMPLETED'?'selected':''}>เสร็จสิ้น</option><option value="NO_SHOW" ${s['Session Status']==='NO_SHOW'?'selected':''}>ไม่มาตามนัด</option><option value="CANCELLED" ${s['Session Status']==='CANCELLED'?'selected':''}>ยกเลิก</option></select>`])):'<div class="empty"><i class="bi bi-calendar-x"></i>ไม่พบตารางในวันที่เลือก</div>'}
-function renderStatus(){let arr=DATA.patients;$('statusRows').innerHTML=arr.map(p=>{let done=DATA.sessions.filter(s=>s['Patient ID']===p['Patient ID']&&countedSession_(s)).length,total=Number(p['Total Sessions']),pct=Math.round(done/total*100)||0;return `<tr><td><b>${esc(p['OPD Queue ID'])}</b></td><td>${esc(p.HN)}<br>${esc(p['Full Name'])}</td><td>${shortProgram(p['Program Type'])}</td><td>${riskBadge(p['Risk Level'])}</td><td style="min-width:130px"><div class="d-flex justify-content-between small"><span>${done}/${total}</span><span>${pct}%</span></div><div class="progress" style="height:6px"><div class="progress-bar" style="width:${pct}%;background:var(--teal)"></div></div></td><td>${p['Start Date']}<br>${p['End Date']}</td><td>${statusBadge(p['Patient Status'])}</td></tr>`}).join('')||'<tr><td colspan="7" class="text-center text-secondary">ไม่มีข้อมูล</td></tr>'}
-function renderHolidays(){$('holidayTable').innerHTML=DATA.holidays.length?tableHtml(['วันที่','ชื่อวันหยุด','ประเภท','รายละเอียด','จัดการ'],DATA.holidays.map(h=>[h['Holiday Date'],esc(h['Holiday Name']),esc(h['Holiday Type']),esc(h.Description),`<button class="btn btn-sm btn-light text-danger" onclick="removeHoliday('${h['Holiday ID']}')"><i class="bi bi-trash"></i></button>`])):'<div class="empty"><i class="bi bi-calendar-x"></i>ยังไม่มีข้อมูลวันหยุด</div>'}
-function renderDoctors(){$('doctorTable').innerHTML=DATA.doctors.length?tableHtml(['ชื่อแพทย์','ความเชี่ยวชาญ','จัดการ'],DATA.doctors.map(d=>[esc(d['Doctor Name']),esc(d.Specialty),`<button class="btn btn-sm btn-light text-danger" onclick="removeDoctor('${d['Doctor ID']}')"><i class="bi bi-trash"></i></button>`])):'<div class="empty"><i class="bi bi-person-badge"></i>ยังไม่มีรายชื่อแพทย์</div>'}
-function renderSettings(){$('timeBadges').innerHTML=DATA.times.map(t=>`<span class="badge-soft b-blue">${t}</span>`).join('')}
-function populateSelects(){$('doctorSelect').innerHTML='<option value="">เลือกแพทย์</option>'+DATA.doctors.map(d=>`<option>${esc(d['Doctor Name'])}</option>`).join('');$('timeSelect').innerHTML=DATA.times.map(t=>`<option>${t}</option>`).join('')}
-function openPatientModal(){ $('patientForm').reset();$('patientForm').elements['Patient ID'].value='';$('patientForm').elements['OPD Queue ID'].value='';$('patientModal').querySelector('.modal-title').textContent='เพิ่มข้อมูลผู้ป่วย';bootstrap.Modal.getOrCreateInstance($('patientModal')).show()}
-function editPatient(id){let p=DATA.patients.find(x=>x['Patient ID']===id);if(!p)return;let f=$('patientForm');Object.keys(p).forEach(k=>{if(f.elements[k])f.elements[k].value=p[k]});f.elements['Patient ID'].value=p['Patient ID'];f.elements['OPD Queue ID'].value=p['OPD Queue ID'];$('patientModal').querySelector('.modal-title').textContent='แก้ไขข้อมูลผู้ป่วย';bootstrap.Modal.getOrCreateInstance($('patientModal')).show()}
-async function submitPatient(){let f=$('patientForm');if(!f.reportValidity())return;let p=Object.fromEntries(new FormData(f).entries());try{let r=await run('savePatient',p);bootstrap.Modal.getInstance($('patientModal')).hide();toast(`บันทึกสำเร็จ • ${r.queueId}`);await refreshData()}catch(e){}}
-async function cancelPatient(id){let c=await Swal.fire({title:'ยืนยันยกเลิกผู้ป่วย?',text:'ระบบจะเปลี่ยนสถานะเป็น CANCELLED และคืนเลขคิว',icon:'warning',showCancelButton:true,confirmButtonText:'ยืนยัน',cancelButtonText:'กลับ',confirmButtonColor:'#EF664B'});if(!c.isConfirmed)return;await run('setPatientStatus',{patientId:id,status:'CANCELLED'});toast('ยกเลิกผู้ป่วยแล้ว');refreshData()}
-async function changeSession(id,status){await run('setSessionStatus',{sessionId:id,status});toast('อัปเดตสถานะแล้ว');refreshData()}
-function openHolidayModal(){$('holidayForm').reset();bootstrap.Modal.getOrCreateInstance($('holidayModal')).show()}
-async function submitHoliday(){let f=$('holidayForm');if(!f.reportValidity())return;await run('saveHoliday',Object.fromEntries(new FormData(f).entries()));bootstrap.Modal.getInstance($('holidayModal')).hide();toast('เพิ่มวันหยุดแล้ว');refreshData()}
-async function removeHoliday(id){let c=await Swal.fire({title:'ปิดใช้งานวันหยุดนี้?',icon:'warning',showCancelButton:true,confirmButtonText:'ยืนยัน',cancelButtonText:'ยกเลิก'});if(c.isConfirmed){await run('deleteHoliday',{holidayId:id});toast('ปิดใช้งานแล้ว');refreshData()}}
-function openDoctorModal(){$('doctorForm').reset();bootstrap.Modal.getOrCreateInstance($('doctorModal')).show()}
-async function submitDoctor(){let f=$('doctorForm');if(!f.reportValidity())return;await run('saveDoctor',Object.fromEntries(new FormData(f).entries()));bootstrap.Modal.getInstance($('doctorModal')).hide();toast('เพิ่มแพทย์แล้ว');refreshData()}
-async function removeDoctor(id){let c=await Swal.fire({title:'ปิดใช้งานรายชื่อนี้?',icon:'warning',showCancelButton:true,confirmButtonText:'ยืนยัน',cancelButtonText:'ยกเลิก'});if(c.isConfirmed){await run('deleteDoctor',{doctorId:id});toast('ปิดใช้งานแล้ว');refreshData()}}
-function renderCalendar(){if(calendar){calendar.destroy();calendar=null}calendar=new FullCalendar.Calendar($('calendar'),{initialView:window.innerWidth<600?'listMonth':'dayGridMonth',locale:'th',height:'auto',headerToolbar:{left:'prev,next today',center:'title',right:'dayGridMonth,listMonth'},events:[...DATA.sessions.filter(s=>s['Session Status']!=='CANCELLED').map(s=>{let p=DATA.patients.find(p=>p['Patient ID']===s['Patient ID'])||{};return {title:`${s['OPD Queue ID']||''} ${p['Full Name']||s.HN}`.trim(),start:s['Scheduled Date'],backgroundColor:(s['Session Status']==='COMPLETED'||s['Session Status']==='NO_SHOW')?'#26A69A':'#0288D1'}}),...DATA.holidays.map(h=>({title:h['Holiday Name'],start:h['Holiday Date'],display:'background',backgroundColor:'#ffe3df'}))],eventClick:info=>Swal.fire({title:info.event.title,text:info.event.start.toLocaleDateString('th-TH')})});calendar.render()}
-refreshData();
+    <div id="drawerOverlay" class="hidden fixed inset-0 bg-slate-900/30 z-40 lg:hidden"></div>
+    <main class="main-area min-h-screen pb-24 lg:pb-8">
+      <header class="h-[76px] bg-white/90 backdrop-blur border-b border-[#e8efee] flex items-center justify-between px-4 sm:px-8 sticky top-0 z-30">
+        <div class="flex items-center gap-3">
+          <button id="openDrawer" class="lg:hidden w-10 h-10 rounded-xl bg-[#F0FAF8] text-[#00897B] grid place-items-center"><i data-lucide="menu"></i></button>
+          <div><div id="pageTitle" class="font-semibold text-base sm:text-lg">แบบประเมินความพึงพอใจ</div><div class="text-[11px] text-slate-400 hidden sm:block">หน่วยสังคมสงเคราะห์ ตึก ศรีสังวาลย์</div></div>
+        </div>
+        <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-500"></span><span class="text-xs text-slate-500">ระบบพร้อมใช้งาน</span><div class="w-9 h-9 rounded-xl bg-[#E0F2F1] text-[#00897B] grid place-items-center ml-2"><i data-lucide="user-round" class="w-4"></i></div></div>
+      </header>
+
+      <div class="max-w-[1240px] mx-auto p-4 sm:p-7 lg:p-9">
+        <section id="surveyView">
+          <div class="rounded-[26px] bg-gradient-to-r from-[#00796B] to-[#4DB6AC] text-white p-6 sm:p-8 mb-6 relative overflow-hidden">
+            <div class="absolute -right-8 -top-16 w-64 h-64 rounded-full border-[35px] border-white/10"></div>
+            <div class="relative max-w-3xl">
+              <span class="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs mb-4"><i data-lucide="sparkles" class="w-3.5 h-3.5"></i> แบบสอบถามออนไลน์ ประจำปี 2570</span>
+              <h1 class="text-2xl sm:text-3xl font-semibold leading-snug">แบบประเมินความพึงพอใจ<br class="sm:hidden"> ประจำปี 2570 ครั้งที่ 1</h1>
+              <p class="text-white/85 text-sm mt-2">หน่วยสังคมสงเคราะห์ ตึก ศรีสังวาลย์</p>
+              <p class="text-white/75 text-xs sm:text-sm mt-4 max-w-2xl leading-6">ขอความกรุณาท่านตอบแบบประเมินตามความเป็นจริง ข้อมูลของท่านจะนำไปใช้ในการพัฒนาคุณภาพการให้บริการ</p>
+            </div>
+          </div>
+
+          <form id="surveyForm" class="space-y-5">
+            <section class="card p-5 sm:p-7">
+              <div class="flex items-center gap-3 mb-5"><span class="section-number">01</span><div><h2 class="font-semibold">ข้อมูลทั่วไปของผู้ตอบแบบสอบถาม</h2><p class="text-xs text-slate-400">กรุณาเลือกข้อมูลที่ตรงกับท่าน</p></div></div>
+              <div class="grid sm:grid-cols-3 gap-5">
+                <div><label class="block text-sm font-medium mb-2">เพศ <b class="text-rose-400">*</b></label><div class="grid grid-cols-2 gap-2"><label class="choice"><input required type="radio" name="gender" value="ชาย"> ชาย</label><label class="choice"><input type="radio" name="gender" value="หญิง"> หญิง</label></div></div>
+                <div><label class="block text-sm font-medium mb-2">อายุ <b class="text-rose-400">*</b></label><div class="space-y-2"><label class="choice"><input required type="radio" name="ageGroup" value="ต่ำกว่า 20 ปี"> ต่ำกว่า 20 ปี</label><label class="choice"><input type="radio" name="ageGroup" value="20–59 ปี"> 20–59 ปี</label><label class="choice"><input type="radio" name="ageGroup" value="60 ปีขึ้นไป"> 60 ปีขึ้นไป</label></div></div>
+                <div><label class="block text-sm font-medium mb-2">ความสัมพันธ์กับผู้ป่วย <b class="text-rose-400">*</b></label><div class="space-y-2"><label class="choice"><input required type="radio" name="relationship" value="ผู้ป่วยเอง"> ผู้ป่วยเอง</label><label class="choice"><input type="radio" name="relationship" value="ญาติหรือผู้ดูแล"> ญาติหรือผู้ดูแล</label></div></div>
+              </div>
+            </section>
+
+            <section class="card p-5 sm:p-7">
+              <div class="flex flex-wrap items-center justify-between gap-3 mb-5"><div class="flex items-center gap-3"><span class="section-number">02</span><div><h2 class="font-semibold">ระดับความพึงพอใจ</h2><p class="text-xs text-slate-400">เลือก 1 ระดับในแต่ละหัวข้อ</p></div></div><span class="text-xs bg-[#E0F2F1] text-[#00796B] rounded-full px-3 py-1">5 ระดับ + ไม่สามารถประเมินได้</span></div>
+              <div id="ratingQuestions" class="space-y-5"></div>
+              <div class="mt-5 p-3 rounded-xl bg-[#F7FAFA] text-xs text-slate-500 leading-6">5 = พอใจมากที่สุด · 4 = พอใจมาก · 3 = พอใจปานกลาง · 2 = เฉย ๆ · 1 = ไม่พอใจ · ไม่สามารถประเมินได้</div>
+            </section>
+
+            <section class="card p-5 sm:p-7">
+              <div class="flex items-center gap-3 mb-5"><span class="section-number">03</span><div><h2 class="font-semibold">ความคิดเห็นเพิ่มเติม</h2><p class="text-xs text-slate-400">เลือกได้มากกว่า 1 ข้อ และระบุรายละเอียดเพิ่มเติมได้</p></div></div>
+              <div class="space-y-6">
+                <div><h3 class="text-sm font-medium mb-3 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-amber-400"></span> ท่านคิดว่าควรปรับปรุงการบริการในเรื่องใด</h3><div id="improveTopics" class="space-y-2"></div></div>
+                <div class="border-t border-slate-100 pt-5"><h3 class="text-sm font-medium mb-3 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> ท่านรู้สึกประทับใจการบริการในเรื่องใด</h3><div id="impressedTopics" class="space-y-2"></div></div>
+              </div>
+            </section>
+
+            <section class="card p-5 sm:p-7">
+              <div class="flex items-center gap-3 mb-5"><span class="section-number">04</span><div><h2 class="font-semibold">ความเชื่อมั่นต่อบริการ</h2><p class="text-xs text-slate-400">เลือกคำตอบที่ตรงกับความคิดเห็นของท่าน</p></div></div>
+              <div class="grid sm:grid-cols-2 gap-6">
+                <div><label class="text-sm font-medium block mb-3">หากไม่มีติดปัญหาสิทธิ์การรักษา ท่านจะกลับมารับบริการที่นี่อีกหรือไม่ <b class="text-rose-400">*</b></label><div class="space-y-2"><label class="choice"><input required type="radio" name="returnIntent" value="มา"> มา</label><label class="choice"><input type="radio" name="returnIntent" value="ไม่มา"> ไม่มา</label><label class="choice"><input type="radio" name="returnIntent" value="ไม่แน่ใจ"> ไม่แน่ใจ</label></div></div>
+                <div><label class="text-sm font-medium block mb-3">ท่านจะแนะนำบุคคลที่ท่านรู้จักให้มารับบริการที่นี่หรือไม่ <b class="text-rose-400">*</b></label><div class="space-y-2"><label class="choice"><input required type="radio" name="recommendIntent" value="แนะนำ"> แนะนำ</label><label class="choice"><input type="radio" name="recommendIntent" value="ไม่แนะนำ"> ไม่แนะนำ</label><label class="choice"><input type="radio" name="recommendIntent" value="ไม่แน่ใจ"> ไม่แน่ใจ</label></div></div>
+              </div>
+            </section>
+
+            <section class="card p-5 sm:p-7">
+              <div class="flex items-center gap-3 mb-4"><span class="section-number">05</span><div><h2 class="font-semibold">ข้อเสนอแนะ</h2><p class="text-xs text-slate-400">ข้อเสนอแนะเพิ่มเติมเพื่อพัฒนาการให้บริการ</p></div></div>
+              <textarea name="suggestion" rows="4" maxlength="4000" class="field resize-y" placeholder="พิมพ์ข้อเสนอแนะของท่าน (ถ้ามี)"></textarea>
+            </section>
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pb-5"><p class="text-xs text-slate-400">เครื่องหมาย <span class="text-rose-400">*</span> จำเป็นต้องตอบ</p><div class="flex gap-2 w-full sm:w-auto"><button type="reset" id="resetBtn" class="btn-soft flex-1 sm:flex-none">ล้างคำตอบ</button><button type="submit" id="submitBtn" class="btn-primary flex-1 sm:flex-none inline-flex items-center justify-center gap-2"><i data-lucide="send" class="w-4"></i> ส่งแบบประเมิน</button></div></div>
+          </form>
+        </section>
+
+        <section id="dashboardView" class="hidden-view">
+          <div class="flex flex-wrap justify-between items-end gap-3 mb-6"><div><div class="text-xs text-[#00897B] font-medium mb-1">SURVEY ANALYTICS</div><h1 class="text-2xl font-semibold">ภาพรวมผลประเมิน</h1><p class="text-sm text-slate-400 mt-1">สรุปผลแบบประเมินความพึงพอใจ ประจำปี 2570 ครั้งที่ 1</p></div><button id="refreshDashboard" class="btn-soft inline-flex gap-2 items-center text-sm"><i data-lucide="refresh-cw" class="w-4"></i> โหลดข้อมูลใหม่</button></div>
+          <div id="dashboardContent">
+            <div class="grid sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-5">
+              <div class="card p-5"><div class="skeleton h-3 w-24 mb-4"></div><div class="skeleton h-8 w-20"></div></div>
+              <div class="card p-5"><div class="skeleton h-3 w-24 mb-4"></div><div class="skeleton h-8 w-20"></div></div>
+              <div class="card p-5"><div class="skeleton h-3 w-24 mb-4"></div><div class="skeleton h-8 w-20"></div></div>
+              <div class="card p-5"><div class="skeleton h-3 w-24 mb-4"></div><div class="skeleton h-8 w-20"></div></div>
+            </div>
+            <div class="card p-8 text-center text-sm text-slate-400">กำลังโหลดข้อมูลสรุป...</div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <nav class="mobile-nav fixed bottom-0 inset-x-0 z-30 bg-white border-t border-slate-100 px-5 py-2 flex justify-around lg:hidden">
+      <button class="mobile-tab flex flex-col items-center gap-1 text-[#00897B] text-[10px] py-1" data-view="survey"><i data-lucide="clipboard-list" class="w-5 h-5"></i>แบบประเมิน</button>
+      <button class="mobile-tab flex flex-col items-center gap-1 text-slate-400 text-[10px] py-1" data-view="dashboard"><i data-lucide="chart-no-axes-combined" class="w-5 h-5"></i>ภาพรวม</button>
+      <button id="mobileTop" class="flex flex-col items-center gap-1 text-slate-400 text-[10px] py-1"><i data-lucide="arrow-up" class="w-5 h-5"></i>ด้านบน</button>
+    </nav>
+  </div>
+
+<script>
+const CONFIG = {
+  API_URL: 'https://script.google.com/macros/s/AKfycbx44f_O0hC2vglQk6dK4fR8-3iMq4BVEsN9dBygt3suEwzneZ8IMd_iQBABVp7frGs/exec'
+};
+const QUESTIONS = [
+ 'ความสะดวกในการขอวันนัดหมาย',
+ 'ได้รับบริการตามเวลาที่นัดหมาย',
+ 'พฤติกรรมการให้บริการของเจ้าหน้าที่',
+ 'ความสะอาดของสถานที่',
+ 'ความเพียงพอของอุปกรณ์',
+ 'การให้คำแนะนำและข้อมูลของเจ้าหน้าที่',
+ 'ได้รับบริการตรงตามความคาดหวัง',
+ 'ความพึงพอใจโดยรวม'
+];
+const TOPICS = [
+ 'ความสะดวกในการขอวันนัดหมาย',
+ 'การได้รับการบริการตามเวลาที่นัดหมาย',
+ 'พฤติกรรมการให้บริการของเจ้าหน้าที่',
+ 'ความสะอาดของสถานที่',
+ 'ความเพียงพอของอุปกรณ์',
+ 'การให้คำแนะนำและข้อมูลของเจ้าหน้าที่',
+ 'อื่นๆ'
+];
+const SCALE = [
+ {value:5,label:'พอใจมากที่สุด'}, {value:4,label:'พอใจมาก'},
+ {value:3,label:'พอใจปานกลาง'}, {value:2,label:'เฉย ๆ'},
+ {value:1,label:'ไม่พอใจ'}, {value:'ไม่สามารถประเมินได้',label:'ประเมินไม่ได้'}
+];
+let dashboardLoaded = false;
+let chartInstances = [];
+
+function renderFormFields(){
+  document.getElementById('ratingQuestions').innerHTML = QUESTIONS.map((q,i)=>`
+    <div class="border-b border-slate-100 last:border-0 pb-5 last:pb-0">
+      <div class="flex gap-2 items-start mb-3"><span class="text-xs text-[#00897B] font-semibold mt-1">${String(i+1).padStart(2,'0')}</span><p class="text-sm font-medium">${q} <b class="text-rose-400">*</b></p></div>
+      <div class="grid grid-cols-3 sm:grid-cols-6 gap-2">${SCALE.map((s,j)=>`
+        <label class="rating-option"><input class="sr-only" type="radio" required name="rating${i}" value="${s.value}"><span class="block text-base font-semibold mb-1">${j===5?'–':s.value}</span><span class="block leading-4">${s.label}</span></label>`).join('')}</div>
+    </div>`).join('');
+  const makeTopics = (type) => TOPICS.map((topic,i)=>`
+    <div class="rounded-xl border border-slate-100 p-3">
+      <label class="flex items-center gap-3 cursor-pointer text-sm"><input type="checkbox" class="w-4 h-4 accent-[#00897B]" data-topic="${type}" data-index="${i}" onchange="toggleComment(this)"> <span>${topic}</span></label>
+      <div id="${type}-comment-${i}" class="hidden mt-3"><textarea class="field text-sm" rows="2" maxlength="2000" placeholder="แสดงความคิดเห็นเพิ่มเติมในหัวข้อนี้..."></textarea></div>
+    </div>`).join('');
+  document.getElementById('improveTopics').innerHTML = makeTopics('improve');
+  document.getElementById('impressedTopics').innerHTML = makeTopics('impressed');
+}
+function toggleComment(el){
+  const box=document.getElementById(`${el.dataset.topic}-comment-${el.dataset.index}`);
+  box.classList.toggle('hidden',!el.checked);
+  if(!el.checked) box.querySelector('textarea').value='';
+}
+function showLoading(button,loading,label){
+  if(loading){button.dataset.old=button.innerHTML;button.disabled=true;button.innerHTML=`<span class="spin"></span> กำลังดำเนินการ...`;button.classList.add('opacity-80','cursor-wait');}
+  else{button.disabled=false;button.innerHTML=button.dataset.old||label;button.classList.remove('opacity-80','cursor-wait');lucide.createIcons();}
+}
+function callApi(action,payload){
+  return new Promise((resolve,reject)=>{
+    if(window.google && google.script && google.script.run){
+      const runner=google.script.run.withSuccessHandler(resolve).withFailureHandler(err=>reject(new Error(err.message||'เชื่อมต่อระบบไม่สำเร็จ')));
+      if(action==='submit') runner.submitResponse(payload);
+      else runner.getDashboard();
+      return;
+    }
+    const callback='gasCallback_'+Date.now()+'_'+Math.floor(Math.random()*100000);
+    const script=document.createElement('script');
+    const timer=setTimeout(()=>{cleanup();reject(new Error('หมดเวลาการเชื่อมต่อ กรุณาลองใหม่อีกครั้ง'));},25000);
+    function cleanup(){clearTimeout(timer);delete window[callback];script.remove();}
+    window[callback]=(data)=>{cleanup();resolve(data);};
+    const params=new URLSearchParams({api:'1',action,callback});
+    if(payload) params.set('payload',JSON.stringify(payload));
+    script.onerror=()=>{cleanup();reject(new Error('ไม่สามารถเชื่อมต่อ Google Apps Script ได้'));};
+    script.src=CONFIG.API_URL+'?'+params.toString();
+    document.body.appendChild(script);
+  });
+}
+function selectedRadio(name){const el=document.querySelector(`input[name="${name}"]:checked`);return el?el.value:'';}
+function collectGroup(type){
+  const result={};
+  document.querySelectorAll(`input[data-topic="${type}"]`).forEach(el=>{
+    if(el.checked) result[TOPICS[Number(el.dataset.index)]]=el.parentElement.parentElement.querySelector('textarea').value.trim() || 'เลือกหัวข้อนี้';
+  });
+  return result;
+}
+function collectPayload(){
+  const ratings=QUESTIONS.map((_,i)=>{const el=document.querySelector(`input[name="rating${i}"]:checked`);return el?(el.value==='ไม่สามารถประเมินได้'?el.value:Number(el.value)):null;});
+  return {
+    gender:selectedRadio('gender'),ageGroup:selectedRadio('ageGroup'),relationship:selectedRadio('relationship'),
+    ratings,improve:collectGroup('improve'),impressed:collectGroup('impressed'),
+    returnIntent:selectedRadio('returnIntent'),recommendIntent:selectedRadio('recommendIntent'),
+    suggestion:document.querySelector('[name="suggestion"]').value.trim()
+  };
+}
+document.getElementById('surveyForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const form=e.currentTarget;
+  if(!form.reportValidity()) return;
+  const payload=collectPayload();
+  if(payload.ratings.some(v=>v===null)){Swal.fire({icon:'warning',title:'กรุณาประเมินให้ครบ',text:'โปรดเลือกคะแนนให้ครบทั้ง 8 หัวข้อ'});return;}
+  const confirm=await Swal.fire({icon:'question',title:'ยืนยันการส่งแบบประเมิน?',text:'กรุณาตรวจสอบคำตอบก่อนส่งข้อมูล',showCancelButton:true,confirmButtonText:'ยืนยันส่งข้อมูล',cancelButtonText:'กลับไปตรวจสอบ',confirmButtonColor:'#00897B'});
+  if(!confirm.isConfirmed)return;
+  const btn=document.getElementById('submitBtn');showLoading(btn,true);
+  try{
+    const result=await callApi('submit',payload);
+    if(!result || !result.success) throw new Error(result?.message||'ไม่สามารถบันทึกข้อมูลได้');
+    await Swal.fire({icon:'success',title:'ส่งแบบประเมินสำเร็จ',text:'ขอบพระคุณที่สละเวลาให้ความคิดเห็นเพื่อพัฒนาการบริการ',confirmButtonColor:'#00897B'});
+    form.reset();document.querySelectorAll('#surveyForm [id^="improve-comment-"],#surveyForm [id^="impressed-comment-"]').forEach(x=>x.classList.add('hidden'));
+    if(dashboardLoaded) loadDashboard(true);
+    window.scrollTo({top:0,behavior:'smooth'});
+  }catch(err){Swal.fire({icon:'error',title:'เกิดข้อผิดพลาด',text:err.message||'กรุณาลองใหม่อีกครั้ง',confirmButtonColor:'#00897B'});}
+  finally{showLoading(btn,false,'ส่งแบบประเมิน');}
+});
+document.getElementById('resetBtn').addEventListener('click',async e=>{
+  e.preventDefault();const r=await Swal.fire({icon:'warning',title:'ล้างคำตอบทั้งหมด?',text:'ข้อมูลที่กรอกไว้จะถูกล้าง',showCancelButton:true,confirmButtonText:'ล้างคำตอบ',cancelButtonText:'ยกเลิก',confirmButtonColor:'#E57373'});
+  if(r.isConfirmed){document.getElementById('surveyForm').reset();document.querySelectorAll('#surveyForm [id^="improve-comment-"],#surveyForm [id^="impressed-comment-"]').forEach(x=>x.classList.add('hidden'));}
+});
+
+function switchView(view){
+  const survey=view==='survey';
+  document.getElementById('surveyView').classList.toggle('hidden-view',!survey);
+  document.getElementById('dashboardView').classList.toggle('hidden-view',survey);
+  document.getElementById('pageTitle').textContent=survey?'แบบประเมินความพึงพอใจ':'ภาพรวมผลประเมิน';
+  document.querySelectorAll('.sidebar-link').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
+  document.querySelectorAll('.mobile-tab').forEach(b=>{b.classList.toggle('text-[#00897B]',b.dataset.view===view);b.classList.toggle('text-slate-400',b.dataset.view!==view);});
+  closeDrawer();
+  if(!survey&&!dashboardLoaded) loadDashboard();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>switchView(b.dataset.view)));
+const sidebar=document.getElementById('sidebar'),overlay=document.getElementById('drawerOverlay');
+function openDrawer(){sidebar.classList.add('open');overlay.classList.remove('hidden');}
+function closeDrawer(){sidebar.classList.remove('open');overlay.classList.add('hidden');}
+document.getElementById('openDrawer').addEventListener('click',openDrawer);
+document.getElementById('closeDrawer').addEventListener('click',closeDrawer);
+overlay.addEventListener('click',closeDrawer);
+document.getElementById('mobileTop').addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+document.getElementById('refreshDashboard').addEventListener('click',()=>loadDashboard(true));
+
+function destroyCharts(){chartInstances.forEach(c=>c.destroy());chartInstances=[];}
+function chart(id,type,labels,datasets,opts={}){
+  const el=document.getElementById(id);if(!el)return;
+  const instance=new Chart(el,{type,data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:opts.legend??false,position:'bottom',labels:{usePointStyle:true,boxWidth:7,font:{family:'Kanit'}}}},scales:type==='doughnut'?{}:{x:{grid:{display:false},ticks:{font:{family:'Kanit',size:10}}},y:{beginAtZero:true,grid:{color:'#edf2f1'},ticks:{precision:0,font:{family:'Kanit',size:10}}}},...opts.options}});
+  chartInstances.push(instance);
+}
+function metricCard(icon,label,value,sub){
+ return `<div class="card p-5"><div class="flex justify-between items-start"><div><p class="text-xs text-slate-400">${label}</p><div class="text-3xl font-semibold mt-2 text-[#263238]">${value}</div><p class="text-[11px] text-slate-400 mt-1">${sub}</p></div><div class="w-10 h-10 rounded-xl bg-[#E0F2F1] text-[#00897B] grid place-items-center"><i data-lucide="${icon}" class="w-5"></i></div></div></div>`;
+}
+function listRows(items){return items.map(x=>`<div class="flex items-center justify-between gap-3 py-2 border-b border-slate-50 last:border-0"><span class="text-xs text-slate-500">${x.label}</span><span class="text-sm font-medium text-slate-700">${x.value}</span></div>`).join('');}
+function renderDashboard(d){
+ destroyCharts();
+ const ratings=d.ratings||[];
+ document.getElementById('dashboardContent').innerHTML=`
+  <div class="grid sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-5">
+   ${metricCard('users','จำนวนผู้ตอบแบบประเมิน',d.total+' คน','ข้อมูลสะสมทั้งหมด')}
+   ${metricCard('star','คะแนนเฉลี่ยรวม',Number(d.average||0).toFixed(2)+' / 5','เฉพาะรายการที่ให้คะแนน')}
+   ${metricCard('calendar-check','รอบการประเมิน','ครั้งที่ 1','ประจำปี 2570')}
+   ${metricCard('heart-handshake','หน่วยบริการ','สังคมสงเคราะห์','ตึก ศรีสังวาลย์')}
+  </div>
+  <div class="grid xl:grid-cols-5 gap-5 mb-5">
+   <div class="card p-5 xl:col-span-3"><div class="flex justify-between items-center mb-4"><div><h3 class="font-medium">คะแนนเฉลี่ยรายหัวข้อ</h3><p class="text-xs text-slate-400">คะแนนเต็ม 5 คะแนน</p></div><span class="text-xs rounded-full bg-[#E0F2F1] text-[#00796B] px-3 py-1">8 หัวข้อ</span></div><div class="h-[300px]"><canvas id="ratingChart"></canvas></div></div>
+   <div class="card p-5 xl:col-span-2"><h3 class="font-medium mb-1">ข้อมูลผู้ตอบแบบประเมิน</h3><p class="text-xs text-slate-400 mb-3">จำแนกตามเพศ</p><div class="h-[210px]"><canvas id="genderChart"></canvas></div><div class="mt-3">${listRows(d.gender||[])}</div></div>
+  </div>
+  <div class="grid lg:grid-cols-2 gap-5 mb-5">
+   <div class="card p-5"><h3 class="font-medium">ประเด็นที่ควรปรับปรุง</h3><p class="text-xs text-slate-400 mb-4">จำนวนผู้เลือกแต่ละหัวข้อ</p><div class="h-[250px]"><canvas id="improveChart"></canvas></div></div>
+   <div class="card p-5"><h3 class="font-medium">ประเด็นที่ประทับใจ</h3><p class="text-xs text-slate-400 mb-4">จำนวนผู้เลือกแต่ละหัวข้อ</p><div class="h-[250px]"><canvas id="impressedChart"></canvas></div></div>
+  </div>
+  <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-5 mb-5">
+   <div class="card p-5"><h3 class="font-medium mb-3">ช่วงอายุ</h3>${listRows(d.age||[])}</div>
+   <div class="card p-5"><h3 class="font-medium mb-3">ความสัมพันธ์กับผู้ป่วย</h3>${listRows(d.relationship||[])}</div>
+   <div class="card p-5"><h3 class="font-medium mb-3">ความเชื่อมั่นต่อบริการ</h3><p class="text-xs text-slate-400 mt-2">กลับมารับบริการอีก</p>${listRows(d.returnIntent||[])}<p class="text-xs text-slate-400 mt-3">การแนะนำบุคคลอื่น</p>${listRows(d.recommendIntent||[])}</div>
+  </div>
+  <div class="card p-5 overflow-hidden"><h3 class="font-medium mb-1">รายละเอียดคะแนนแต่ละหัวข้อ</h3><p class="text-xs text-slate-400 mb-4">ไม่นับรายการที่เลือกไม่สามารถประเมินได้ในการคำนวณค่าเฉลี่ย</p><div class="overflow-x-auto"><table class="w-full min-w-[620px] text-sm"><thead><tr class="text-left text-xs text-slate-400 border-b"><th class="py-3 pr-3">หัวข้อประเมิน</th><th class="py-3 px-3">คะแนนเฉลี่ย</th><th class="py-3 px-3">จำนวนผู้ให้คะแนน</th><th class="py-3 px-3">ประเมินไม่ได้</th></tr></thead><tbody>${ratings.map(r=>`<tr class="border-b border-slate-50"><td class="py-3 pr-3">${r.question}</td><td class="py-3 px-3"><span class="rounded-lg bg-[#E0F2F1] text-[#00796B] px-2 py-1 font-medium">${Number(r.average||0).toFixed(2)}</span></td><td class="py-3 px-3">${r.rated}</td><td class="py-3 px-3">${r.unable}</td></tr>`).join('')}</tbody></table></div></div>
+  <p class="text-[11px] text-slate-400 text-center mt-5">ข้อมูลแสดงผลจาก Google Sheets · โหลดข้อมูลเมื่อเปิดหน้า Dashboard เท่านั้น</p>`;
+ chart('ratingChart','bar',ratings.map(r=>r.question),[{label:'คะแนนเฉลี่ย',data:ratings.map(r=>r.average),backgroundColor:'#4DB6AC',borderRadius:7}],{options:{indexAxis:'y',scales:{x:{min:0,max:5,grid:{color:'#edf2f1'}},y:{grid:{display:false},ticks:{font:{family:'Kanit',size:10}}}}}});
+ chart('genderChart','doughnut',(d.gender||[]).map(x=>x.label),[{data:(d.gender||[]).map(x=>x.value),backgroundColor:['#00897B','#B2DFDB'],borderWidth:0}],{legend:true});
+ chart('improveChart','bar',(d.improve||[]).map(x=>x.label),[{data:(d.improve||[]).map(x=>x.value),backgroundColor:'#FFB74D',borderRadius:6}],{options:{indexAxis:'y',scales:{x:{beginAtZero:true,ticks:{precision:0}},y:{grid:{display:false},ticks:{font:{family:'Kanit',size:10}}}}}});
+ chart('impressedChart','bar',(d.impressed||[]).map(x=>x.label),[{data:(d.impressed||[]).map(x=>x.value),backgroundColor:'#4DB6AC',borderRadius:6}],{options:{indexAxis:'y',scales:{x:{beginAtZero:true,ticks:{precision:0}},y:{grid:{display:false},ticks:{font:{family:'Kanit',size:10}}}}}});
+ lucide.createIcons();
+}
+async function loadDashboard(force=false){
+ const button=document.getElementById('refreshDashboard');
+ if(force)showLoading(button,true);
+ try{const result=await callApi('dashboard');if(!result||!result.success)throw new Error(result?.message||'โหลดข้อมูลไม่สำเร็จ');renderDashboard(result);dashboardLoaded=true;}
+ catch(err){document.getElementById('dashboardContent').innerHTML=`<div class="card p-8 text-center"><div class="text-rose-400 mb-2"><i data-lucide="wifi-off" class="w-8 h-8 mx-auto"></i></div><p class="font-medium">ไม่สามารถโหลดข้อมูลได้</p><p class="text-xs text-slate-400 mt-1">${err.message}</p><button onclick="loadDashboard(true)" class="btn-soft mt-4 text-sm">ลองอีกครั้ง</button></div>`;lucide.createIcons();Swal.fire({icon:'error',title:'โหลดข้อมูลไม่สำเร็จ',text:err.message,confirmButtonColor:'#00897B'});}
+ finally{if(force)showLoading(button,false,'โหลดข้อมูลใหม่');}
+}
+renderFormFields();
+lucide.createIcons();
 </script>
-</body></html>
+</body>
+</html>
